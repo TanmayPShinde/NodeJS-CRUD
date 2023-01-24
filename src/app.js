@@ -1,9 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+
 mongoose.set("strictQuery", false);
+dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+const CONN = process.env.CONN;
 
 app.get("/", (req, res) => {
   res.send("Hello world!");
@@ -15,11 +19,9 @@ app.post("/", (req, res) => {
 
 const start = async () => {
   try {
-    await mongoose.connect(
-      "mongodb+srv://tanmay:notpassword@cluster0.xcgkdi7.mongodb.net/?retryWrites=true&w=majority"
-    );
+    await mongoose.connect(CONN);
 
-    app.listen(PORT, () => {
+    app.listen(PORT, "127.0.0.1", () => {
       console.log(`Listening on port ${PORT}`);
     });
   } catch (e) {
