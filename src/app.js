@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const Customer = require("./models/Customer");
 
 mongoose.set("strictQuery", false);
 dotenv.config();
@@ -9,8 +10,15 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const CONN = process.env.CONN;
 
+const customer = new Customer({
+  name: "Tanmay",
+  industry: "IT",
+});
+
+customer.save();
+
 app.get("/", (req, res) => {
-  res.send("Hello world!");
+  res.send(customer);
 });
 
 app.post("/", (req, res) => {
