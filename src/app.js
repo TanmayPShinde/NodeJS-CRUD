@@ -16,13 +16,20 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/customers", async (req, res) => {
-  console.log(await mongoose.connection.db.listCollections().toArray());
+  // console.log(await mongoose.connection.db.listCollections().toArray()); listing all collections in the DB
   try {
     const result = await Customer.find();
     res.send({ customers: result });
   } catch (e) {
     res.status(500).send({ error: e.message });
   }
+});
+
+app.get("/api/customers/:id", async (req, res) => {
+  res.send({
+    reqParameters: req.params, //url params - htt..com/param1/param2
+    reqQueryParams: req.query, //url query params - htt...com?param1="val"&param2="val"
+  });
 });
 
 app.post("/api/customers", async (req, res) => {
