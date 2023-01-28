@@ -25,11 +25,11 @@ app.get("/api/customers", async (req, res) => {
   }
 });
 
-app.post("/api/customers", (req, res) => {
+app.post("/api/customers", async (req, res) => {
   console.log(req.body);
   const customer = new Customer(req.body);
   try {
-    customer.save();
+    await customer.save();
     res.status(201).send({ customer });
   } catch (e) {
     res.status(400).send({ error: e.message });
