@@ -26,10 +26,18 @@ app.get("/api/customers", async (req, res) => {
 });
 
 app.get("/api/customers/:id", async (req, res) => {
-  res.send({
-    reqParameters: req.params, //url params - htt..com/param1/param2
-    reqQueryParams: req.query, //url query params - htt...com?param1="val"&param2="val"
-  });
+  // res.send({
+  //   reqParameters: req.params, //url params - htt..com/param1/param2
+  //   reqQueryParams: req.query, //url query params - htt...com?param1="val"&param2="val"
+  // });
+  try {
+    // const result = await Customer.find({ _id: req.params.id });
+    const result = await Customer.findById(req.params.id);
+    if (!result) res.status(404).json({ error: "Not found." });
+    else res.json({ customer: result });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 });
 
 app.post("/api/customers", async (req, res) => {
