@@ -11,10 +11,10 @@ app.use(express.json()); // this is to parse request bodies for post (body-parse
 const PORT = process.env.PORT || 3000;
 const CONN = process.env.CONN;
 
+// Get APIs
 app.get("/", (req, res) => {
   res.send("Welcome to Noob House");
 });
-
 app.get("/api/customers", async (req, res) => {
   // console.log(await mongoose.connection.db.listCollections().toArray()); listing all collections in the DB
   try {
@@ -24,7 +24,6 @@ app.get("/api/customers", async (req, res) => {
     res.status(500).send({ error: e.message });
   }
 });
-
 app.get("/api/customers/:id", async (req, res) => {
   // res.send({
   //   reqParameters: req.params, //url params - htt..com/param1/param2
@@ -40,6 +39,7 @@ app.get("/api/customers/:id", async (req, res) => {
   }
 });
 
+// Post APIs
 app.post("/api/customers", async (req, res) => {
   console.log(req.body);
   const customer = new Customer(req.body);
@@ -50,6 +50,27 @@ app.post("/api/customers", async (req, res) => {
     res.status(400).send({ error: e.message });
   }
 });
+
+// Update APIs
+
+app.put("/api/customers/:id", async (req, res) => {
+  try {
+    const customerId = req.params.id;
+    const result = await Customer.replaceOne({ _id: customerId }, req.body);
+    console.log(result);
+    res.status(201).json({ modifiedCount: result.modifiedCount });
+  } catch (e) {
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
+// this should be used with Patch
+// app.put("/api/customers:id", async (req, res) => {
+//   console.log(req.body);
+//   try {
+//     const result = Customer.updateOne({"_id": ObjectId()})
+//   }
+// })
 
 const start = async () => {
   try {
